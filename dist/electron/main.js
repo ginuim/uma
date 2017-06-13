@@ -1234,6 +1234,54 @@ function unmonkeypatch () {
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var wrappy = __webpack_require__(13)
+module.exports = wrappy(once)
+module.exports.strict = wrappy(onceStrict)
+
+once.proto = once(function () {
+  Object.defineProperty(Function.prototype, 'once', {
+    value: function () {
+      return once(this)
+    },
+    configurable: true
+  })
+
+  Object.defineProperty(Function.prototype, 'onceStrict', {
+    value: function () {
+      return onceStrict(this)
+    },
+    configurable: true
+  })
+})
+
+function once (fn) {
+  var f = function () {
+    if (f.called) return f.value
+    f.called = true
+    return f.value = fn.apply(this, arguments)
+  }
+  f.called = false
+  return f
+}
+
+function onceStrict (fn) {
+  var f = function () {
+    if (f.called)
+      throw new Error(f.onceError)
+    f.called = true
+    return f.value = fn.apply(this, arguments)
+  }
+  var name = fn.name || 'Function wrapped with `once`'
+  f.onceError = name + " shouldn't be called more than once"
+  f.called = false
+  return f
+}
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
 exports.alphasort = alphasort
 exports.alphasorti = alphasorti
 exports.setopts = setopts
@@ -1477,7 +1525,7 @@ function childrenIgnored (self, path) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Approach:
@@ -1526,23 +1574,23 @@ var fs = __webpack_require__(1)
 var rp = __webpack_require__(9)
 var minimatch = __webpack_require__(3)
 var Minimatch = minimatch.Minimatch
-var inherits = __webpack_require__(30)
+var inherits = __webpack_require__(29)
 var EE = __webpack_require__(35).EventEmitter
 var path = __webpack_require__(0)
 var assert = __webpack_require__(5)
 var isAbsolute = __webpack_require__(4)
-var globSync = __webpack_require__(28)
-var common = __webpack_require__(10)
+var globSync = __webpack_require__(31)
+var common = __webpack_require__(11)
 var alphasort = common.alphasort
 var alphasorti = common.alphasorti
 var setopts = common.setopts
 var ownProp = common.ownProp
-var inflight = __webpack_require__(29)
+var inflight = __webpack_require__(28)
 var util = __webpack_require__(6)
 var childrenIgnored = common.childrenIgnored
 var isIgnored = common.isIgnored
 
-var once = __webpack_require__(12)
+var once = __webpack_require__(10)
 
 function glob (pattern, options, cb) {
   if (typeof options === 'function') cb = options, options = {}
@@ -2273,54 +2321,6 @@ Glob.prototype._stat2 = function (f, abs, er, stat, cb) {
 
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var wrappy = __webpack_require__(13)
-module.exports = wrappy(once)
-module.exports.strict = wrappy(onceStrict)
-
-once.proto = once(function () {
-  Object.defineProperty(Function.prototype, 'once', {
-    value: function () {
-      return once(this)
-    },
-    configurable: true
-  })
-
-  Object.defineProperty(Function.prototype, 'onceStrict', {
-    value: function () {
-      return onceStrict(this)
-    },
-    configurable: true
-  })
-})
-
-function once (fn) {
-  var f = function () {
-    if (f.called) return f.value
-    f.called = true
-    return f.value = fn.apply(this, arguments)
-  }
-  f.called = false
-  return f
-}
-
-function onceStrict (fn) {
-  var f = function () {
-    if (f.called)
-      throw new Error(f.onceError)
-    f.called = true
-    return f.value = fn.apply(this, arguments)
-  }
-  var name = fn.name || 'Function wrapped with `once`'
-  f.onceError = name + " shouldn't be called more than once"
-  f.called = false
-  return f
-}
-
-
-/***/ }),
 /* 13 */
 /***/ (function(module, exports) {
 
@@ -2395,16 +2395,75 @@ function map_obj(obj, fn){
   }, {})
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/_7zip@0.0.6@7zip"))
+/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/7zip"))
 
 /***/ }),
 /* 16 */
 /***/ (function(module, exports) {
 
 module.exports = {
-	"name": "7zip",
-	"version": "0.0.6",
+	"_args": [
+		[
+			{
+				"raw": "7zip@0.0.6",
+				"scope": null,
+				"escapedName": "7zip",
+				"name": "7zip",
+				"rawSpec": "0.0.6",
+				"spec": "0.0.6",
+				"type": "version"
+			},
+			"/Users/ginuim/Workspace/Projects/Parvati/node_modules/electron-devtools-installer"
+		]
+	],
+	"_from": "7zip@0.0.6",
+	"_id": "7zip@0.0.6",
+	"_inCache": true,
+	"_location": "/7zip",
+	"_nodeVersion": "5.11.0",
+	"_npmOperationalInternal": {
+		"host": "packages-12-west.internal.npmjs.com",
+		"tmp": "tmp/7zip-0.0.6.tgz_1463274735811_0.1922009070403874"
+	},
+	"_npmUser": {
+		"name": "fritx",
+		"email": "uxfritz@163.com"
+	},
+	"_npmVersion": "3.8.6",
+	"_phantomChildren": {},
+	"_requested": {
+		"raw": "7zip@0.0.6",
+		"scope": null,
+		"escapedName": "7zip",
+		"name": "7zip",
+		"rawSpec": "0.0.6",
+		"spec": "0.0.6",
+		"type": "version"
+	},
+	"_requiredBy": [
+		"/electron-devtools-installer"
+	],
+	"_resolved": "https://registry.npmjs.org/7zip/-/7zip-0.0.6.tgz",
+	"_shasum": "9cafb171af82329490353b4816f03347aa150a30",
+	"_shrinkwrap": null,
+	"_spec": "7zip@0.0.6",
+	"_where": "/Users/ginuim/Workspace/Projects/Parvati/node_modules/electron-devtools-installer",
+	"bin": {
+		"7z": "7zip-lite/7z.exe"
+	},
+	"bugs": {
+		"url": "https://github.com/fritx/win-7zip/issues"
+	},
+	"dependencies": {},
 	"description": "7zip Windows Package via Node.js",
+	"devDependencies": {},
+	"directories": {},
+	"dist": {
+		"shasum": "9cafb171af82329490353b4816f03347aa150a30",
+		"tarball": "https://registry.npmjs.org/7zip/-/7zip-0.0.6.tgz"
+	},
+	"gitHead": "ece5481873f357545c99a9e2f9e1cdb3fe76de2d",
+	"homepage": "https://github.com/fritx/win-7zip#readme",
 	"keywords": [
 		"7z",
 		"7zip",
@@ -2412,22 +2471,32 @@ module.exports = {
 		"windows",
 		"install"
 	],
-	"repository": "git@github.com:fritx/win-7zip.git",
-	"bin": {
-		"7z": "7zip-lite/7z.exe"
-	},
+	"license": "GNU LGPL",
 	"main": "index.js",
+	"maintainers": [
+		{
+			"name": "fritx",
+			"email": "uxfritz@163.com"
+		}
+	],
+	"name": "7zip",
+	"optionalDependencies": {},
+	"readme": "ERROR: No README data found!",
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/fritx/win-7zip.git"
+	},
 	"scripts": {
 		"test": "mocha"
 	},
-	"license": "GNU LGPL",
-	"_from": "7zip@0.0.6",
-	"_resolved": "http://registry.npm.taobao.org/7zip/download/7zip-0.0.6.tgz"
+	"version": "0.0.6"
 };
 
 /***/ }),
 /* 17 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 
 module.exports = balanced;
 function balanced(a, b, str) {
@@ -2810,7 +2879,7 @@ exports.uninstall = () => {
 
 exports.path = __dirname
 
-/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/_devtron@1.4.0@devtron"))
+/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/devtron"))
 
 /***/ }),
 /* 22 */
@@ -3580,6 +3649,108 @@ exports.realpath = function realpath(p, cache, cb) {
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var wrappy = __webpack_require__(13)
+var reqs = Object.create(null)
+var once = __webpack_require__(10)
+
+module.exports = wrappy(inflight)
+
+function inflight (key, cb) {
+  if (reqs[key]) {
+    reqs[key].push(cb)
+    return null
+  } else {
+    reqs[key] = [cb]
+    return makeres(key)
+  }
+}
+
+function makeres (key) {
+  return once(function RES () {
+    var cbs = reqs[key]
+    var len = cbs.length
+    var args = slice(arguments)
+
+    // XXX It's somewhat ambiguous whether a new callback added in this
+    // pass should be queued for later execution if something in the
+    // list of callbacks throws, or if it should just be discarded.
+    // However, it's such an edge case that it hardly matters, and either
+    // choice is likely as surprising as the other.
+    // As it happens, we do go ahead and schedule it for later execution.
+    try {
+      for (var i = 0; i < len; i++) {
+        cbs[i].apply(null, args)
+      }
+    } finally {
+      if (cbs.length > len) {
+        // added more in the interim.
+        // de-zalgo, just in case, but don't call again.
+        cbs.splice(0, len)
+        process.nextTick(function () {
+          RES.apply(null, args)
+        })
+      } else {
+        delete reqs[key]
+      }
+    }
+  })
+}
+
+function slice (args) {
+  var length = args.length
+  var array = []
+
+  for (var i = 0; i < length; i++) array[i] = args[i]
+  return array
+}
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+try {
+  var util = __webpack_require__(6);
+  if (typeof util.inherits !== 'function') throw '';
+  module.exports = util.inherits;
+} catch (e) {
+  module.exports = __webpack_require__(30);
+}
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
 module.exports = globSync
 globSync.GlobSync = GlobSync
 
@@ -3587,12 +3758,12 @@ var fs = __webpack_require__(1)
 var rp = __webpack_require__(9)
 var minimatch = __webpack_require__(3)
 var Minimatch = minimatch.Minimatch
-var Glob = __webpack_require__(11).Glob
+var Glob = __webpack_require__(12).Glob
 var util = __webpack_require__(6)
 var path = __webpack_require__(0)
 var assert = __webpack_require__(5)
 var isAbsolute = __webpack_require__(4)
-var common = __webpack_require__(10)
+var common = __webpack_require__(11)
 var alphasort = common.alphasort
 var alphasorti = common.alphasorti
 var setopts = common.setopts
@@ -4069,108 +4240,6 @@ GlobSync.prototype._makeAbs = function (f) {
 
 
 /***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var wrappy = __webpack_require__(13)
-var reqs = Object.create(null)
-var once = __webpack_require__(12)
-
-module.exports = wrappy(inflight)
-
-function inflight (key, cb) {
-  if (reqs[key]) {
-    reqs[key].push(cb)
-    return null
-  } else {
-    reqs[key] = [cb]
-    return makeres(key)
-  }
-}
-
-function makeres (key) {
-  return once(function RES () {
-    var cbs = reqs[key]
-    var len = cbs.length
-    var args = slice(arguments)
-
-    // XXX It's somewhat ambiguous whether a new callback added in this
-    // pass should be queued for later execution if something in the
-    // list of callbacks throws, or if it should just be discarded.
-    // However, it's such an edge case that it hardly matters, and either
-    // choice is likely as surprising as the other.
-    // As it happens, we do go ahead and schedule it for later execution.
-    try {
-      for (var i = 0; i < len; i++) {
-        cbs[i].apply(null, args)
-      }
-    } finally {
-      if (cbs.length > len) {
-        // added more in the interim.
-        // de-zalgo, just in case, but don't call again.
-        cbs.splice(0, len)
-        process.nextTick(function () {
-          RES.apply(null, args)
-        })
-      } else {
-        delete reqs[key]
-      }
-    }
-  })
-}
-
-function slice (args) {
-  var length = args.length
-  var array = []
-
-  for (var i = 0; i < length; i++) array[i] = args[i]
-  return array
-}
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-try {
-  var util = __webpack_require__(6);
-  if (typeof util.inherits !== 'function') throw '';
-  module.exports = util.inherits;
-} catch (e) {
-  module.exports = __webpack_require__(31);
-}
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports) {
-
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
-  }
-}
-
-
-/***/ }),
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4180,7 +4249,7 @@ rimraf.sync = rimrafSync
 var assert = __webpack_require__(5)
 var path = __webpack_require__(0)
 var fs = __webpack_require__(1)
-var glob = __webpack_require__(11)
+var glob = __webpack_require__(12)
 
 var defaultGlobOpts = {
   nosort: true,

@@ -3,6 +3,7 @@
     v-if="data.visible"
     :class="['layer-abs', current && current.name === data.name ? 'layer-current' : '']"
     @click="selected"
+    @mouseover="hover"
     :style="style">
     <div class="dot dot-tl"></div>
     <div class="dot dot-tr"></div>
@@ -38,6 +39,12 @@ export default {
   methods: {
     selected: function () {
       this.$emit('selected', this.data)
+    },
+    hover: function () {
+      this.$emit('hover', this.data)
+    },
+    hideAccountsMenu: function () {
+      this.isShowAccountsMenu = false
     }
   }
 }
@@ -55,7 +62,7 @@ export default {
   display: none;
   background: #FFF;
   margin: -3px;
-  border: #44D7B6 solid 1px;
+  border: #44C0FF solid 1px;
   border-radius: 50%;
 }
 .layer-abs .dot-tl {
@@ -79,7 +86,8 @@ export default {
   right: 0;
 }
 .layer-abs:hover {
-  border: #44D7B6 solid 1px;
+  /*border: #44D7B6 solid 1px;*/
+  border: #44C0FF solid 1px;
 }
 .layer-abs:hover .dot {
   display: block;

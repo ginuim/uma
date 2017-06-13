@@ -1,15 +1,17 @@
 <template>
   <div class="wrapper">
+    <router-link to="/">返回</router-link>
     <!-- 内容区 -->
     <div class="main" :style="mainStyle">
       <div :style="{ 'width': targetW + 'px' }" class="container">
         <img ref="image" :style="{ 'width': targetW + 'px' }" :src="bgImage" />
         <Layer
           v-on:selected="selected"
+          v-on:hover="hover"
           v-for="(item, index) in elems"
           :key="index"
           :data.sync="item"
-          :current="current"
+          :current="currentItem"
           :ratio="(targetW / originW)"
         >
         </Layer>
@@ -17,21 +19,21 @@
     </div>
     <!-- 面板区 -->
     <div class="dashboard">
-      <div v-if="current.text" class="">
-        <input type="text" name="" :value="current.text.value">
-        <div v-if="current.text.font" class="">
-          <p>字体名称： {{ current.text.font.name }}</p>
-          <p>字体大小： {{ current.text.font.sizes[0] }}</p>
-          <p>颜色：{{ current.text.font.colors }}</p>
+      <div v-if="currentItem.text" class="">
+        <input type="text" name="" :value="currentItem.text.value">
+        <div v-if="currentItem.text.font" class="">
+          <p>字体名称： {{ currentItem.text.font.name }}</p>
+          <p>字体大小： {{ currentItem.text.font.sizes[0] }}</p>
+          <p>颜色：{{ currentItem.text.font.colors }}</p>
         </div>
       </div>
-      <div class="">width: {{ current.width }}</div>
-      <div class="">height: {{ current.height }}</div>
-      <div class="">top: {{ current.top }}</div>
-      <div class="">left: {{ current.left }}</div>
-      <div class="">right: {{ current.right }}</div>
-      <div class="">bottom: {{ current.bottom }}</div>
-      <!-- {{ current }} -->
+      <div class="">width: {{ currentItem.width }}</div>
+      <div class="">height: {{ currentItem.height }}</div>
+      <div class="">top: {{ currentItem.top }}</div>
+      <div class="">left: {{ currentItem.left }}</div>
+      <div class="">right: {{ currentItem.right }}</div>
+      <div class="">bottom: {{ currentItem.bottom }}</div>
+      <!-- {{ currentItem }} -->
     </div>
   </div>
 </template>
@@ -52,7 +54,8 @@ export default {
       targetW: 300,
       originW: psd.document.width,
       elems: [],
-      current: {}
+      currentItem: {},
+      hoverItem: {}
     }
   },
   components: {
@@ -74,6 +77,7 @@ export default {
   },
   computed: {
     mainStyle: function () {
+      console.log(this.$refs['image'])
       if (this.$refs['image']) {
         console.log(window.outerHeight)
         return {
@@ -98,7 +102,11 @@ export default {
 
     // 当前元素
     selected: function (data) {
-      this.current = data
+      this.currentItem = data
+    },
+
+    hover: function (data) {
+      this.hoverItem = data
     },
 
     // 禁止 drag 事件默认行为
@@ -148,20 +156,20 @@ export default {
     },
 
     copyColor: function () {
-      console.log(this.current.color)
+      console.log(this.currentItem.color)
     },
 
     copyBgColor: function () {
-      console.log(this.current.color)
+      console.log(this.currentItem.color)
     },
 
     copyText: function () {
-      clipboard.writeText(this.current.text.value)
-      console.log(this.current.text.value)
+      clipboard.writeText(this.currentItem.text.value)
+      console.log(this.currentItem.text.value)
     },
 
     copyFont: function () {
-      console.log(this.current.color)
+      console.log(this.currentItem.color)
     }
   }
 }
@@ -171,7 +179,7 @@ export default {
 .wrapper {
   height: 100%;
   display: flex;
-  background-color: #EEE;
+  background-color: #F5F5F5;
   flex-direction: row;
   align-items: center;
 }
@@ -186,6 +194,9 @@ export default {
 }
 .container {
   position: relative;
+}
+.container img {
+  box-shadow: 0 0 4px rgba(7,40,107,.2);
 }
 .dashboard {
   width: 10rem;
