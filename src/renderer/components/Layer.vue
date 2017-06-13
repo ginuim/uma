@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="data.visible"
-    :class="['layer-abs', current && current.name === data.name ? 'layer-current' : '']"
+    :class="['layer-abs', current && current === data ? 'layer-current' : '']"
     @click="selected"
     @mouseover="hover"
     :style="style">
@@ -15,12 +15,13 @@
 <script>
 export default {
   name: 'Layer',
-  props: ['data', 'ratio', 'current'],
+  props: ['data', 'index', 'ratio', 'current'],
   data: function () {
     return {
     }
   },
   created: function () {
+    this.data.index = this.index
     // console.log(this.data)
   },
   computed: {
@@ -87,17 +88,18 @@ export default {
 }
 .layer-abs:hover {
   /*border: #44D7B6 solid 1px;*/
-  border: #44C0FF solid 1px;
+  /*border: #44C0FF solid 1px;*/
 }
 .layer-abs:hover .dot {
-  display: block;
+  display: none;
 }
 .layer-current,
 .layer-current:hover,
 .layer-current .dot {
   border: #F60 solid 1px;
 }
-.layer-current .dot {
+.layer-current .dot,
+.layer-current:hover .dot {
   display: block;
 }
 </style>

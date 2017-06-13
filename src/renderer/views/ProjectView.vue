@@ -9,12 +9,22 @@
           v-on:selected="selected"
           v-on:hover="hover"
           v-for="(item, index) in elems"
+          :index="index"
           :key="index"
           :data.sync="item"
           :current="currentItem"
-          :ratio="(targetW / originW)"
+          :ratio="ratio"
         >
         </Layer>
+        <div v-if="isShowGuides" :style="{left: hoverItem.left * ratio + 'px'}" class="line line-left"></div>
+        <div v-if="isShowGuides" :style="{left: (hoverItem.left + hoverItem.width) * ratio + 'px'}" class="line line-right"></div>
+        <div v-if="isShowGuides" :style="{top: hoverItem.top * ratio + 'px'}" class="line line-top"></div>
+        <div v-if="isShowGuides" :style="{top: (hoverItem.top + hoverItem.height) * ratio + 'px'}" class="line line-bottom"></div>
+
+        <div v-if="isShowBorder" :style="{left: hoverItem.left * ratio + 'px', top: hoverItem.top * ratio + 'px', height: hoverItem.height * ratio + 'px', borderLeft: 'rgba(68, 192, 255, 1) solid 1px'}" class="line"></div>
+        <div v-if="isShowBorder" :style="{left: (hoverItem.left + hoverItem.width) * ratio + 'px', top: hoverItem.top * ratio + 'px', height: hoverItem.height * ratio + 'px', borderLeft: 'rgba(68, 192, 255, 1) solid 1px'}" class="line line-right"></div>
+        <div v-if="isShowBorder" :style="{left: hoverItem.left * ratio + 'px', top: hoverItem.top * ratio + 'px', height: '1px', width: hoverItem.width * ratio + 'px', borderTop: 'rgba(68, 192, 255, 1) solid 1px'}" class="line"></div>
+        <div v-if="isShowBorder" :style="{left: hoverItem.left * ratio + 'px', top: (hoverItem.top + hoverItem.height) * ratio + 'px', height: '1px', width: hoverItem.width * ratio + 'px', borderTop: 'rgba(68, 192, 255, 1) solid 1px'}" class="line line-bottom"></div>
       </div>
     </div>
     <!-- 面板区 -->
@@ -51,7 +61,7 @@ export default {
     return {
       data: psd,
       bgImage: 'static/img/audio.png',
-      targetW: 300,
+      targetW: 400,
       originW: psd.document.width,
       elems: [],
       currentItem: {},
@@ -86,6 +96,15 @@ export default {
       } else {
         return {}
       }
+    },
+    ratio: function () {
+      return (this.targetW / this.originW)
+    },
+    isShowGuides: function () {
+      return (this.currentItem && (this.hoverItem !== this.currentItem))
+    },
+    isShowBorder: function () {
+      return ((this.hoverItem !== this.currentItem))
     }
   },
   methods: {
@@ -200,5 +219,23 @@ export default {
 }
 .dashboard {
   width: 10rem;
+}
+.line {
+  box-sizing: border-box;
+  position: absolute;
+}
+.line-left,
+.line-right {
+  width: 1px;
+  height: 100%;
+  top: 0;
+  border-left: rgba(68, 192, 255, 0.2) solid 1px;
+}
+.line-top,
+.line-bottom {
+  width: 100%;
+  height: 1px;
+  left: 0;
+  border-top: rgba(68, 192, 255, 0.2) solid 1px;
 }
 </style>
